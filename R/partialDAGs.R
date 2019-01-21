@@ -425,7 +425,7 @@ partial8 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,
 #' @return graph adjacency B
 #'
 #' @examples
-#' partial4(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36)
+#' partial10(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36, m4 = 48, m5 = 60, m6 = 72, m7 = 84, m8 = 96, m9 = 108)
 #'
 #' @export
 partial10 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL,m8=NULL,m9=NULL,eps = 10^(-4),maxitr = 100, init=NULL){
@@ -484,6 +484,103 @@ partial10 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL
     B = offDiagBlock(B,S,1*l,m9,p,p)
 
     B = diagonalBLock(B,S,1*l,m9,p,p)
+
+    diff = max(B-Bold)
+    Bold = B
+    itr = itr +1
+  }
+  return(list(B=B,itr = itr))
+}
+
+#' Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups
+#'
+#' @param X a matrix of size n by p containing n observations an p variables
+#' @param l penalization parameter
+#' @param m1 the node at which the first partition occurs
+#' @param m2 the node at which the second partition occurs
+#' @param m3 the node at which the third partition occurs
+#' @param m4 the node at which the fourth partition occurs
+#' @param m5 the node at which the fifth partition occurs
+#' @param m6 the node at which the sixth partition occurs
+#' @param m7 the node at which the seventh partition occurs
+#' @param m8 the node at which the eighth partition occurs
+#' @param m9 the node at which the ninth partition occurs
+#' @param eps tolerance parameter to decide whether algorithm has converved or not
+#' @param maxitr maximum number of iterations to run before returning output
+#' @param init initial estimate of graph adjacency B
+#'
+#' @return graph adjacency B
+#'
+#' @examples
+#' partial10_inc(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36, m4 = 48, m5 = 60, m6 = 72, m7 = 84, m8 = 96, m9 = 108)
+#'
+#' @export
+partial10_inc <- function(X,l,z = 0,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL,m8=NULL,m9=NULL,eps = 10^(-4),maxitr = 100, init=NULL){
+  (n = dim(X)[1])
+  (p = dim(X)[2])
+  (S = (1/n)*t(X)%*%X)
+  if(is.null(init)){
+    B11 = diag(m1)
+    B22 = diag(m2-m1)
+    B33 = diag(p-m2)
+    B = Bold = as.matrix(bdiag(B11,B22,B33))
+  } else {B = Bold = init}
+  diff = 1
+  itr = 1
+  while((diff>eps)&(itr<maxitr)){
+    cat('itr:', itr, '...')
+    ## first all the diagonals
+    for(i in 1:p){
+      B[i,i] = Bii(S,B,i)
+    }
+    #block row 1
+    row = 0
+    B = diagonalBLock(B,S,1*l+(z + m1)^row,0,m1,p)
+    #block row 2
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m2-m1)^row,m1,m2,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m2-m1)^row,m1,m2,p)
+    #block row 3
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m3-m2)^row,m2,m3,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m3-m2)^row,m2,m3,p)
+    #block row 4
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m4-m3)^row,m3,m4,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m4-m3)^row,m3,m4,p)
+    #block row 5
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m5-m4)^row,m4,m5,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m5-m4)^row,m4,m5,p)
+    #block row 6
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m6-m5)^row,m5,m6,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m6-m5)^row,m5,m6,p)
+    #block row 7
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m7-m6)^row,m6,m7,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m7-m6)^row,m6,m7,p)
+    #block row 8
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m8-m7)^row,m7,m8,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m8-m7)^row,m7,m8,p)
+    #block row 9
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z + m9-m8)^row,m8,m9,p)
+
+    B = diagonalBLock(B,S,1*l+(z + m9-m8)^row,m8,m9,p)
+    #block row 10
+    row = row + 1
+    B = offDiagBlock(B,S,1*l+(z+ p-m9)^row,m9,p,p)
+
+    B = diagonalBLock(B,S,1*l+(z + p-m9)^row,m9,p,p)
 
     diff = max(B-Bold)
     Bold = B
