@@ -4,9 +4,23 @@
 \alias{partial10}
 \title{Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups}
 \usage{
-partial10(X, l, a = NULL, m1 = NULL, m2 = NULL, m3 = NULL,
-  m4 = NULL, m5 = NULL, m6 = NULL, m7 = NULL, m8 = NULL,
-  m9 = NULL, eps = 10^(-4), maxitr = 100, init = NULL)
+partial10(
+  X,
+  l,
+  a = NULL,
+  m1 = NULL,
+  m2 = NULL,
+  m3 = NULL,
+  m4 = NULL,
+  m5 = NULL,
+  m6 = NULL,
+  m7 = NULL,
+  m8 = NULL,
+  m9 = NULL,
+  eps = 10^(-4),
+  maxitr = 100,
+  init = NULL
+)
 }
 \arguments{
 \item{X}{a matrix of size n by p containing n observations an p variables}
@@ -44,6 +58,6 @@ graph adjacency B
 Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups
 }
 \examples{
-partial4(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36)
+partial10(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36, m4 = 48, m5 = 60, m6 = 72, m7 = 84, m8 = 96, m9 = 108)
 
 }

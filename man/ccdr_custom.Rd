@@ -4,9 +4,23 @@
 \alias{ccdr_custom}
 \title{Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization}
 \usage{
-ccdr_custom(X, l, a = NULL, m1 = NULL, m2 = NULL, m3 = NULL,
-  m4 = NULL, m5 = NULL, m6 = NULL, m7 = NULL, m8 = NULL,
-  m9 = NULL, eps = 10^(-4), maxitr = 100, init = NULL)
+ccdr_custom(
+  X,
+  l,
+  a = NULL,
+  m1 = NULL,
+  m2 = NULL,
+  m3 = NULL,
+  m4 = NULL,
+  m5 = NULL,
+  m6 = NULL,
+  m7 = NULL,
+  m8 = NULL,
+  m9 = NULL,
+  eps = 10^(-4),
+  maxitr = 100,
+  init = NULL
+)
 }
 \arguments{
 \item{X}{a matrix of size n by p containing n observations an p variables}

@@ -4,9 +4,23 @@
 \alias{partial4}
 \title{Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups}
 \usage{
-partial4(X, l, a = NULL, m1 = NULL, m2 = NULL, m3 = NULL,
-  m4 = NULL, m5 = NULL, m6 = NULL, m7 = NULL, m8 = NULL,
-  m9 = NULL, eps = 10^(-4), maxitr = 100, init = NULL)
+partial4(
+  X,
+  l,
+  a = NULL,
+  m1 = NULL,
+  m2 = NULL,
+  m3 = NULL,
+  m4 = NULL,
+  m5 = NULL,
+  m6 = NULL,
+  m7 = NULL,
+  m8 = NULL,
+  m9 = NULL,
+  eps = 10^(-4),
+  maxitr = 100,
+  init = NULL
+)
 }
 \arguments{
 \item{X}{a matrix of size n by p containing n observations an p variables}
