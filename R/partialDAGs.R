@@ -425,6 +425,89 @@ partial8 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,
 #' @return graph adjacency B
 #'
 #' @examples
+#' partial9(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36, m4 = 48, m5 = 60, m6 = 72, m7 = 84, m8 = 96)
+#'
+#' @export
+partial9 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL,m8=NULL,m9=NULL,eps = 10^(-4),maxitr = 100, init=NULL){
+  (n = dim(X)[1])
+  (p = dim(X)[2])
+  (S = (1/n)*t(X)%*%X)
+  if(is.null(init)){
+    B11 = diag(m1)
+    B22 = diag(m2-m1)
+    B33 = diag(p-m2)
+    B = Bold = as.matrix(bdiag(B11,B22,B33))
+  } else {B = Bold = init}
+  diff = 1
+  itr = 1
+  while((diff>eps)&(itr<maxitr)){
+    cat('itr:', itr, '...')
+    ## first all the diagonals
+    for(i in 1:p){
+      B[i,i] = Bii(S,B,i)
+    }
+    
+    B = diagonalBLock(B,S,1*l,0,m1,p)
+    
+    B = offDiagBlock(B,S,1*l,m1,m2,p)
+    
+    B = diagonalBLock(B,S,1*l,m1,m2,p)
+    
+    B = offDiagBlock(B,S,1*l,m2,m3,p)
+    
+    B = diagonalBLock(B,S,1*l,m2,m3,p)
+    
+    B = offDiagBlock(B,S,1*l,m3,m4,p)
+    
+    B = diagonalBLock(B,S,1*l,m3,m4,p)
+    
+    B = offDiagBlock(B,S,1*l,m4,m5,p)
+    
+    B = diagonalBLock(B,S,1*l,m4,m5,p)
+    
+    B = offDiagBlock(B,S,1*l,m5,m6,p)
+    
+    B = diagonalBLock(B,S,1*l,m5,m6,p)
+    
+    B = offDiagBlock(B,S,1*l,m6,m7,p)
+    
+    B = diagonalBLock(B,S,1*l,m6,m7,p)
+    
+    B = offDiagBlock(B,S,1*l,m7,m8,p)
+    
+    B = diagonalBLock(B,S,1*l,m7,m8,p)
+    
+    B = offDiagBlock(B,S,1*l,m8,p,p)
+    
+    B = diagonalBLock(B,S,1*l,m8,p,p)
+    
+    diff = max(B-Bold)
+    Bold = B
+    itr = itr +1
+  }
+  return(list(B=B,itr = itr))
+}
+
+#' Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups
+#'
+#' @param X a matrix of size n by p containing n observations an p variables
+#' @param l penalization parameter
+#' @param m1 the node at which the first partition occurs
+#' @param m2 the node at which the second partition occurs
+#' @param m3 the node at which the third partition occurs
+#' @param m4 the node at which the fourth partition occurs
+#' @param m5 the node at which the fifth partition occurs
+#' @param m6 the node at which the sixth partition occurs
+#' @param m7 the node at which the seventh partition occurs
+#' @param m8 the node at which the eighth partition occurs
+#' @param m9 the node at which the ninth partition occurs
+#' @param eps tolerance parameter to decide whether algorithm has converved or not
+#' @param maxitr maximum number of iterations to run before returning output
+#' @param init initial estimate of graph adjacency B
+#'
+#' @return graph adjacency B
+#'
+#' @examples
 #' partial10(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36, m4 = 48, m5 = 60, m6 = 72, m7 = 84, m8 = 96, m9 = 108)
 #'
 #' @export
