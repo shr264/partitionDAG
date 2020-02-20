@@ -349,6 +349,54 @@ partial5 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,
   return(list(B=B,itr = itr))
 }
 
+partial5_inc <- function(X,l,a=NULL,
+                         m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL,m8=NULL,m9=NULL,
+                         l1=NULL,l2=NULL,l3=NULL,l4=NULL,l5=NULL,l6=NULL,l7=NULL,l8=NULL,l9=NULL,
+                         eps = 10^(-4),maxitr = 100, init=NULL){
+  (n = dim(X)[1])
+  (p = dim(X)[2])
+  (S = (1/n)*t(X)%*%X)
+  if(is.null(init)){
+    B11 = diag(m1)
+    B22 = diag(m2-m1)
+    B33 = diag(p-m2)
+    B = Bold = as.matrix(bdiag(B11,B22,B33))
+  } else {B = Bold = init}
+  diff = 1
+  itr = 1
+  while((diff>eps)&(itr<maxitr)){
+    cat('itr:', itr, '...')
+    ## first all the diagonals
+    for(i in 1:p){
+      B[i,i] = Bii(S,B,i)
+    }
+    
+    B = diagonalBLock(B,S,l,0,m1,p)
+    
+    B = offDiagBlock(B,S,l1,m1,m2,p)
+    
+    B = diagonalBLock(B,S,l,m1,m2,p)
+    
+    B = offDiagBlock(B,S,l2,m2,m3,p)
+    
+    B = diagonalBLock(B,S,l,m2,m3,p)
+    
+    B = offDiagBlock(B,S,l3,m3,m4,p)
+    
+    B = diagonalBLock(B,S,l,m3,m4,p)
+    
+    B = offDiagBlock(B,S,l4,m4,p,p)
+    
+    B = diagonalBLock(B,S,l,m4,p,p)
+    
+    diff = max(B-Bold)
+    Bold = B
+    itr = itr +1
+  }
+  return(list(B=B,itr = itr))
+}
+
+
 partial8 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL,m8=NULL,m9=NULL,eps = 10^(-4),maxitr = 100, init=NULL){
   (n = dim(X)[1])
   (p = dim(X)[2])
