@@ -349,6 +349,30 @@ partial5 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,
   return(list(B=B,itr = itr))
 }
 
+#' Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups
+#'
+#' @param X a matrix of size n by p containing n observations an p variables
+#' @param l penalization parameter
+#' @param m1 the node at which the first partition occurs
+#' @param m2 the node at which the second partition occurs
+#' @param m3 the node at which the third partition occurs
+#' @param m4 the node at which the fourth partition occurs
+#' @param m5 not relevant
+#' @param m6 not relevant
+#' @param m7 not relevant
+#' @param m8 not relevant
+#' @param m9 not relevant
+#' @param eps tolerance parameter to decide whether algorithm has converved or not
+#' @param maxitr maximum number of iterations to run before returning output
+#' @param init initial estimate of graph adjacency B
+#'
+#' @return graph adjacency B
+#'
+#' @examples
+#' partial5_inc(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36, m4 = 48)
+#'
+#' @export
+
 partial5_inc <- function(X,l,a=NULL,
                          m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL,m8=NULL,m9=NULL,
                          l1=NULL,l2=NULL,l3=NULL,l4=NULL,l5=NULL,l6=NULL,l7=NULL,l8=NULL,l9=NULL,
