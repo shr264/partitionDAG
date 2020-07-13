@@ -4,7 +4,7 @@ softhresh <- function(x,l){
 
 Bii <- function(S,B,i){
   temp = sum(S[i,-i]*B[i,-i])
-  out = (-2*temp + sqrt(4*temp^2+8*S[i,i]))/(4*S[i,i])
+  out = (-1*temp + sqrt(1*temp^2+4*S[i,i]))/(2*S[i,i])
   out
 }
 

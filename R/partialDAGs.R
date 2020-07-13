@@ -568,6 +568,94 @@ partial9 <- function(X,l,a=NULL,m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,
 #' @param m2 the node at which the second partition occurs
 #' @param m3 the node at which the third partition occurs
 #' @param m4 the node at which the fourth partition occurs
+#' @param m5 not relevant
+#' @param m6 not relevant
+#' @param m7 not relevant
+#' @param m8 not relevant
+#' @param m9 not relevant
+#' @param eps tolerance parameter to decide whether algorithm has converved or not
+#' @param maxitr maximum number of iterations to run before returning output
+#' @param init initial estimate of graph adjacency B
+#'
+#' @return graph adjacency B
+#'
+#' @examples
+#' partial5_inc(X = X, l = 2, m1 = 12, m2 = 24, m3 = 36, m4 = 48)
+#'
+#' @export
+
+partial9_inc <- function(X,l,a=NULL,
+                         m1=NULL,m2=NULL,m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL,m8=NULL,m9=NULL,
+                         l1=NULL,l2=NULL,l3=NULL,l4=NULL,l5=NULL,l6=NULL,l7=NULL,l8=NULL,l9=NULL,
+                         eps = 10^(-4),maxitr = 100, init=NULL){
+  (n = dim(X)[1])
+  (p = dim(X)[2])
+  (S = (1/n)*t(X)%*%X)
+  if(is.null(init)){
+    B11 = diag(m1)
+    B22 = diag(m2-m1)
+    B33 = diag(p-m2)
+    B = Bold = as.matrix(bdiag(B11,B22,B33))
+  } else {B = Bold = init}
+  diff = 1
+  itr = 1
+  while((diff>eps)&(itr<maxitr)){
+    cat('itr:', itr, '...')
+    ## first all the diagonals
+    for(i in 1:p){
+      B[i,i] = Bii(S,B,i)
+    }
+    
+    B = diagonalBLock(B,S,l,0,m1,p)
+    
+    B = offDiagBlock(B,S,l1,m1,m2,p)
+    
+    B = diagonalBLock(B,S,l,m1,m2,p)
+    
+    B = offDiagBlock(B,S,l2,m2,m3,p)
+    
+    B = diagonalBLock(B,S,l,m2,m3,p)
+    
+    B = offDiagBlock(B,S,l3,m3,m4,p)
+    
+    B = diagonalBLock(B,S,l,m3,m4,p)
+    
+    B = offDiagBlock(B,S,1*l4,m4,m5,p)
+    
+    B = diagonalBLock(B,S,1*l,m4,m5,p)
+    
+    B = offDiagBlock(B,S,1*l5,m5,m6,p)
+    
+    B = diagonalBLock(B,S,1*l,m5,m6,p)
+    
+    B = offDiagBlock(B,S,1*l6,m6,m7,p)
+    
+    B = diagonalBLock(B,S,1*l,m6,m7,p)
+    
+    B = offDiagBlock(B,S,1*l7,m7,m8,p)
+    
+    B = diagonalBLock(B,S,1*l,m7,m8,p)
+    
+    B = offDiagBlock(B,S,1*l8,m8,p,p)
+    
+    B = diagonalBLock(B,S,1*l,m8,p,p)
+    
+    
+    diff = max(B-Bold)
+    Bold = B
+    itr = itr +1
+  }
+  return(list(B=B,itr = itr))
+}
+
+#' Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups
+#'
+#' @param X a matrix of size n by p containing n observations an p variables
+#' @param l penalization parameter
+#' @param m1 the node at which the first partition occurs
+#' @param m2 the node at which the second partition occurs
+#' @param m3 the node at which the third partition occurs
+#' @param m4 the node at which the fourth partition occurs
 #' @param m5 the node at which the fifth partition occurs
 #' @param m6 the node at which the sixth partition occurs
 #' @param m7 the node at which the seventh partition occurs
