@@ -3,6 +3,21 @@
 require(Rcpp)
 require('pdagDFS')
 
+#' Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups
+#'
+#' @param B a matrix of size p by p 
+#' @param S a matrix of size p by p 
+#' @param l penalization parameter
+#' @param m1 the node at which the partition occurs
+#' @param m2 not relevant
+#' @param p maximum number of variables
+#'
+#' @return graph adjacency B
+#'
+#' @examples
+#' diagonalBLock(B,S,l, m1 = 0, m2, p)
+#'
+#' @export
 diagonalBLock <- function(B,S,l, m1 = 0, m2, p){
   cat('Processing diagonal block!\n')
   if(m2 == m1 + 1){
@@ -75,6 +90,21 @@ diagonalBLock <- function(B,S,l, m1 = 0, m2, p){
   }
 }
 
+#' Estimates an adjacencey matrix for a DAG based on l1 penalized negative likelihood minimization given a partitioning of the nodes into two groups
+#'
+#' @param B a matrix of size p by p 
+#' @param S a matrix of size p by p 
+#' @param l penalization parameter
+#' @param m1 the node at which the partition occurs
+#' @param m2 not relevant
+#' @param p maximum number of variables
+#'
+#' @return graph adjacency B
+#'
+#' @examples
+#' diagonalBLock_ll(B,S,l, m1 = 0, m2, p)
+#'
+#' @export
 diagonalBLock_ll <- function(B,S,l, m1 = 0, m2, p){
   cat('Processing diagonal block!\n')
   for(i in (m1+2):m2){
