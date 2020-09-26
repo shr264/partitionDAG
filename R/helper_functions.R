@@ -13,10 +13,22 @@ Bki <- function(S,B,k,i,l){
   out
 }
 
+Bik <- function(S,B,i,k,l){
+  out = softhresh(-2*sum(S[k,-k]*B[i,-k])/(4*S[k,k]),l/(4*S[k,k]))
+  out
+}
+
 qBki <- function(S,Bki,B,k,i,l){
   out1 = S[i,i]*Bki^2 + 2*Bki*sum(S[i,-i]*B[k,-i]) + l*abs(Bki)
   out2 = 0
   if(out1<out2){return(list(q = out1, b = Bki))
+  } else {return(list(q = out2, b = 0))}
+}
+
+qBik <- function(S,Bik,B,i,k,l){
+  out1 = S[k,k]*Bik^2 + 2*Bik*sum(S[k,-k]*B[i,-k]) + l*abs(Bik)
+  out2 = 0
+  if(out1<out2){return(list(q = out1, b = Bik))
   } else {return(list(q = out2, b = 0))}
 }
 
@@ -34,18 +46,6 @@ qBki_ll <- function(S,Bki,B,k,i,l){
   new_ll = penloglik(B,S,l)
   if(new_ll<old_ll){return(list(q = new_ll, b = Bki))
   } else {return(list(q = old_ll, b = 0))}
-}
-
-Bik <- function(S,B,i,k,l){
-  out = softhresh(-2*sum(S[k,-k]*B[i,-k])/(4*S[k,k]),l/(4*S[k,k]))
-  out
-}
-
-qBik <- function(S,Bik,B,i,k,l){
-  out1 = S[k,k]*Bik^2 + 2*Bik*sum(S[k,-k]*B[i,-k]) + l*abs(Bik)
-  out2 = 0
-  if(out1<out2){return(list(q = out1, b = Bik))
-  } else {return(list(q = out2, b = 0))}
 }
 
 qBik_ll <- function(S,Bik,B,i,k,l){
